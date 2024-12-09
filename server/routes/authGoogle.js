@@ -1,6 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const jwt = require('jsonwebtoken');
+FRONTEND_URL=process.env.FRONTEND_URL
+
 
 // Configure Passport Google Strategy
 passport.use(new GoogleStrategy({
@@ -30,18 +33,24 @@ passport.deserializeUser((user, done) => {
 const router = express.Router();
 
 // Google OAuth Routes
-router.get('/google',
+router.post('/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 router.get('/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        // Successful login, user is stored in session
-        res.redirect('/dashboard'); // Change this to your frontend dashboard route
+        const user = req.user;
+
+        const token = jwt.sign(
+            { id: user.googleId, email: user.email, name: user.name },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.redirect(`${FRONTEND_URL}/login?token=${token}`);
     }
 );
-
 // Logout Route
 router.post('/logout', (req, res) => {
     req.logout((err) => {
