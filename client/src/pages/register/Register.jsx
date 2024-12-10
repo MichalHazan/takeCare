@@ -107,8 +107,17 @@ const Register = () => {
     try {
       const response = await axiosInstance.post("/api/users/register", formData);
       console.log("Registration successful:", response.data);
+
+      // Show success message
+      alert("Registration successful!");
+
+      // Close the modal
+      setOpen(false);
     } catch (err) {
       console.error("Registration failed:", err.response ? err.response.data : err.message);
+
+      // Show failure message
+      alert("Registration failed. Please check the form and try again.");
     }
   };
 
@@ -223,6 +232,15 @@ const Register = () => {
                   shrink: true, // מאפשר לתווית להופיע מעל שדה התאריך
                 }}
                 value={formData.birthDate}
+                onChange={handleChange}
+            />
+            <TextField
+                label="Address"
+                name="address"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={formData.address || ""}
                 onChange={handleChange}
             />
             <TextField

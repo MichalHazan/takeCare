@@ -6,6 +6,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport'); // Add passport
 const PORT = process.env.PORT || 2000;
+const Nominatim = require('./nominatim'); // ייבוא הראוטר
 
 // Load environment variables
 dotenv.config();
@@ -16,8 +17,12 @@ connectDB();
 // Initialize Express app
 const app = express();
 
+
+
 // Middleware
 app.use(bodyParser.json());
+
+app.use('/nominatim', Nominatim);
 
 const corsOptions = {
     origin: true,
@@ -56,6 +61,12 @@ const reviewRoutes = require('./routes/reviewRoutes');
 app.use('/api/reviews', reviewRoutes);
 app.use("/api/users", userRoutes);
 app.use("/auth", authGoogle);
+
+// Demo route (example data)
+app.get("/api/professionsList", (req, res) => {
+    const professionTypes = ['fitness trainer', 'yoga', 'pilates', 'nlp', 'psychology', 'sociology'];
+    res.json(professionTypes);
+});
 
 // Start the server
 app.listen(PORT, () =>
