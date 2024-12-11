@@ -23,6 +23,8 @@ const Home = () => {
       .then((data) => {
         setUsers(data); // שמירת כל היוזרים
         setFilteredUsers(data); // ברירת המחדל: כל היוזרים
+        data.map((id) => {console.log(id
+        )})
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -31,11 +33,11 @@ const Home = () => {
 
   return (
     
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", justifyContent:"space-between", height: "200%", height: "93vh"}}>
      
       <Filters users={users} setFilteredUsers={setFilteredUsers} />
       <Users filteredUsers={filteredUsers} />
-      <Map></Map>
+      <Map users={users} ></Map>
     </Box>
   );
 };

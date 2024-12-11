@@ -117,7 +117,7 @@ const Filters = ({ users, setFilteredUsers }) => {
           {t("Professions")}
         </Typography>
         <FormGroup>
-          {["fitness trainer", "yoga", "nutritionist"].map((profession) => (
+          {["nlp", "yoga", "nutritionist"].map((profession) => (
             <FormControlLabel
               key={profession}
               control={
@@ -127,7 +127,7 @@ const Filters = ({ users, setFilteredUsers }) => {
                   value={profession}
                 />
               }
-              label={t(profession)}
+              label={<Typography>{t(profession)}</Typography>}
             />
           ))}
         </FormGroup>
@@ -148,7 +148,7 @@ const Filters = ({ users, setFilteredUsers }) => {
                 name="gender"
               />
             }
-            label={t("Male")}
+            label={<Typography>{t("Male")}</Typography>}
           />
           <FormControlLabel
             control={
@@ -163,7 +163,7 @@ const Filters = ({ users, setFilteredUsers }) => {
                 name="gender"
               />
             }
-            label={t("Female")}
+            label={<Typography>{t("female")}</Typography>}
           />
         </FormGroup>
       </FormControl>
@@ -182,7 +182,7 @@ const Filters = ({ users, setFilteredUsers }) => {
                 name="serviceInPerson"
               />
             }
-            label={t("In-Person")}
+            label={<Typography>{t("In-Person")}</Typography>}
           />
           <FormControlLabel
             control={
@@ -192,7 +192,7 @@ const Filters = ({ users, setFilteredUsers }) => {
                 name="serviceZoom"
               />
             }
-            label={t("Via Zoom")}
+            label={<Typography>{t("Via Zoom")}</Typography>}
           />
         </FormGroup>
       </FormControl>
@@ -206,7 +206,7 @@ const Filters = ({ users, setFilteredUsers }) => {
           value={filter.hourlyRate}
           onChange={handleSliderChange}
           valueLabelDisplay="auto"
-          valueLabelFormat={(value) => `${value}$`}
+          valueLabelFormat={(value) => <Typography>{value}$</Typography>}
           min={0}
           max={200}
           step={10}

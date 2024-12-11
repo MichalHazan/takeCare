@@ -9,14 +9,18 @@ const Users = ({ filteredUsers }) => {
 
   return (
     <Box sx={{ padding: "20px" }}>
-      <Grid container spacing={3}>
-        {filteredUsers.map((user, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card sx={{ height: "100%", width: "100%", boxShadow: 3, borderRadius: "12px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+ <Box 
+      display="flex"
+       justifyContent="space-between"   
+     >        {filteredUsers.map((user, index) => (
+<Box  width="25vh"
+          padding="20px" >
+<Card sx={{ height: "100%", width: "100%", boxShadow: 3, borderRadius: "12px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
               <CardMedia
                 component="img"
                 height="200"
                 image={ "https://via.placeholder.com/200" || user.images[0] }
+                width="200"
                 alt={user.fullname}
                 sx={{ objectFit: "cover" }}
               />
@@ -35,10 +39,10 @@ const Users = ({ filteredUsers }) => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+            </Box>
         ))}
-      </Grid>
-    </Box>
+      </Box>
+      </Box>
   );
 };
 
