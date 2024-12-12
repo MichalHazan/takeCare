@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { refreshToken, logoutUser } from "../utils/authUtils";
 // Determine the base URL based on the environment
 const BASE_URL =
   process.env.REACT_APP_API_BASE_URL ||
@@ -19,53 +19,53 @@ const axiosInstance = axios.create({
 
   // Default headers
   headers: {
-    "Content-Type": "application/json",
-    // You can add other default headers here
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
 });
 
-// Request interceptor - run before every request
+// Request interceptor for adding token
 axiosInstance.interceptors.request.use(
-  (config) => {
-    // Add authentication token if it exists
-    const token = localStorage.getItem("token");
+  config => {
+    const token = localStorage.getItem('accessToken');
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  error => Promise.reject(error)
 );
 
-// Response interceptor - run after every response
+// Response interceptor for API calls
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    // Handle common error scenarios
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // Unauthorized - maybe redirect to login or refresh token
-          console.log("Unauthorized access");
-          break;
-        case 403:
-          // Forbidden
-          console.log("Access forbidden");
-          break;
-        case 404:
-          // Not found
-          console.log("Resource not found");
-          break;
-        case 500:
-          // Server error
-          console.log("Server error");
-          break;
+  async function (error) {
+    const originalRequest = error.config;
+
+    // If the error status is 401 and there is no originalRequest._retry flag,
+    // it means the token has expired
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const newAccessToken = await refreshToken();
+
+        // Update the Authorization header
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        // Retry the original request with new token
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        // If refresh token is also invalid, logout the user
+        logoutUser();
+        return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
-
 export default axiosInstance;

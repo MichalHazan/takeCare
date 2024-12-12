@@ -24,6 +24,24 @@
   "Home": "בית",
   "About":"אודות",
   "profile": "פרופיל",
-  "favorites": "מועדפים"
+  "favorites": "מועדפים",
+  "Log in with Google": "התחבר באמצעות גוגל",
+  "New Here": "חדש כאן",
+  "Filter by": "סינון",
+  "home Page":"דף הבית",
+  "Filter Users": "סינון משתמשים",
+  "Gender": "מגדר",
+  "Male": "גבר",
+  "Female": "אישה",
+  "Professions": "מקצועות",
+  "fitness trainer": "מאמן כושר",
+  "yoga": "מדריך יוגה",
+  "nutritionist": "תזונאי/ת",
+  "Services": "שירותים",
+  "In-Person": "פגישה פרונטלית",
+  "Via Zoom": "דרך זום",
+  "Hourly Rate": "תעריף שעתי",
+  "Search by description": "חפש לפי תיאור",
+  "Apply Filters": "החל סינון"
 
 }

@@ -17,6 +17,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../api/axiosConfig";
 import profileicon from '../images/profileicon.png';
+import { googleLogout } from '@react-oauth/google';
 
 export default function Navbar() {
   const { toggleLanguage } = useLanguage();
@@ -25,8 +26,7 @@ export default function Navbar() {
     { label: t("Home"), path: "home" },
     { label: t("About"), path: "about" },
   ];
-  console.log(pages)
-const settings = [t("profile"), t("Logout")];
+const settings = [{label: t("profile"), path: "profile"}, {label: t("Logout"), path: "logout"}];
   // ---------------------MUI-------------------
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -51,8 +51,12 @@ const settings = [t("profile"), t("Logout")];
   };
   // -----------------------
   const logout = async () => {
+    googleLogout(); 
     try {
-      const response = await axiosInstance.delete("/api/users/logout");
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      const response = await axiosInstance.post("/api/auth/logout");
       localStorage.clear();
       navigate("/login");
     } catch (err) {
@@ -189,20 +193,20 @@ const settings = [t("profile"), t("Logout")];
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {localStorage.token ? (
-                  settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                {localStorage.accessToken ? (
+                  settings.map((setting, index) => (
+                    <MenuItem key={setting.path} onClick={handleCloseUserMenu}>
                       <Typography
                         onClick={() => {
-                          if (setting === "Logout") {
+                          if (setting.path === "logout") {
                             logout();
                           } else {
-                            travelTo(setting);
+                            travelTo(setting.path);
                           }
                         }}
                         textAlign="center"
                       >
-                        {setting}
+                        {setting.label}
                       </Typography>
                     </MenuItem>
                   ))
