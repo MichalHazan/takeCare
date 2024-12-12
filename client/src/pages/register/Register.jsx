@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import axiosInstance from '../../api/axiosConfig';
 import Geocode from "react-geocode";
+import { useTranslation } from "react-i18next";
 
 // Utility function to get current location coordinates
 const getLocationCoordinates = async (city, street, streetNumber) => {
@@ -42,6 +43,7 @@ const getLocationCoordinates = async (city, street, streetNumber) => {
 };
 
 const Register = () => {
+  const { t } = useTranslation();
   // Basic user information
   const [fullname, setFullname] = useState("");
   const [username, setUsername] = useState("");
@@ -159,7 +161,7 @@ const Register = () => {
       <form onSubmit={handleSubmit} style={{ width: "400px" }}>
         {/* Basic User Information */}
         <TextField
-          label="Full Name"
+          label={t("Full Name")}
           variant="outlined"
           fullWidth
           margin="normal"
@@ -168,7 +170,7 @@ const Register = () => {
           required
         />
         <TextField
-          label="Username"
+          label={t("Username")}
           variant="outlined"
           fullWidth
           margin="normal"
@@ -177,7 +179,7 @@ const Register = () => {
           required
         />
         <TextField
-          label="Email"
+          label={t("Email")}
           type="email"
           variant="outlined"
           fullWidth
@@ -187,7 +189,7 @@ const Register = () => {
           required
         />
         <TextField
-          label="Password"
+          label={t("password")}
           type="password"
           variant="outlined"
           fullWidth
@@ -197,7 +199,7 @@ const Register = () => {
           required
         />
         <TextField
-          label="Phone"
+          label={t("Phone")}
           variant="outlined"
           fullWidth
           margin="normal"

@@ -25,5 +25,8 @@
   "profile": "profile",
   "favorites": "favorites",
   "Log in with Google": "Log in with Google",
-  "New Here": "New Here"
+  "New Here": "New Here",
+  "Full Name": "Full Name",
+  "Username":"Username",
+  "Phone":"Phone"
 }
