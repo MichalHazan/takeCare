@@ -43,8 +43,6 @@ const generateTokens = (user) => {
 router.post('/google/login', async (req, res) => {
   try {
     const { token, clientId } = req.body;
-    console.log("token ", token)
-    console.log("clientId ", clientId)
      // Validate inputs
      if (!token) {
       return res.status(400).json({ 
