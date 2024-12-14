@@ -17,13 +17,19 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../api/axiosConfig";
-
+import profileicon from '../images/profileicon.png';
 
 const pages = ["Home", "About"];
 const settings = ["profile", "Logout"];
 export default function Navbar() {
   const { toggleLanguage } = useLanguage();
   const { t } = useTranslation();
+  const pages = [
+    { label: t("Home"), path: "home" },
+    { label: t("About"), path: "about" },
+  ];
+  console.log(pages)
+const settings = [t("profile"), t("Logout")];
   // ---------------------MUI-------------------
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -48,8 +54,9 @@ export default function Navbar() {
   };
   // -----------------------
   const logout = async () => {
+    googleLogout(); 
     try {
-      console.log("logout");
+      const response = await axiosInstance.delete("/api/users/logout");
       localStorage.clear();
       //Deleted due to an error message on exit.
       //const response = await axiosInstance.delete("/api/users/logout");
@@ -150,60 +157,60 @@ export default function Navbar() {
                   </IconButton>
                 </Tooltip>
 
-                <Menu
-                    sx={{ mt: "45px" }}
-                    id="menu-appbar"
-                    anchorEl={anchorElUser}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorElUser)}
-                    onClose={handleCloseUserMenu}
-                >
-                  {localStorage.token ? (
-                      settings.map((setting) => (
-                          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                            <Typography
-                                onClick={() => {
-                                  if (setting === "Logout") {
-                                    logout();
-                                  } else {
-                                    travelTo(setting);
-                                  }
-                                }}
-                                textAlign="center"
-                            >
-                              {setting}
-                            </Typography>
-                          </MenuItem>
-                      ))
-                  ) : (
-                      <div>
-                        <MenuItem onClick={handleCloseUserMenu}>
-                          <Typography onClick={() => travelTo("login")}>
-                            {" "}
-                            {t("Login")}{" "}
-                          </Typography>
-                        </MenuItem>
-                        <MenuItem onClick={handleCloseUserMenu}>
-                          <Typography onClick={() => travelTo("register")}>
-                            {" "}
-                            {t("register")}{" "}
-                          </Typography>
-                        </MenuItem>
-                      </div>
-                  )}
-                </Menu>
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
-      </div>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {localStorage.token ? (
+                  settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography
+                        onClick={() => {
+                          if (setting === "Logout") {
+                            logout();
+                          } else {
+                            travelTo(setting);
+                          }
+                        }}
+                        textAlign="center"
+                      >
+                        {setting}
+                      </Typography>
+                    </MenuItem>
+                  ))
+                ) : (
+                  <div>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography onClick={() => travelTo("login")}>
+                        {" "}
+                        {t("Login")}{" "}
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography onClick={() => travelTo("register")}>
+                        {" "}
+                        {t("register")}{" "}
+                      </Typography>
+                    </MenuItem>
+                  </div>
+                )}
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </div>
   );
 }

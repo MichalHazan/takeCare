@@ -1,0 +1,42 @@
+.google_btn {
+    display: flex; /* Align icon and text */
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between the icon and text */
+    background-color: #ffffff; /* White background */
+    border: 1px solid #dadce0; /* Light gray border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Spacing around content */
+    font-size: 16px; /* Text size */
+    font-weight: 500; /* Semi-bold text */
+    color: #3c4043; /* Dark gray text */
+    cursor: pointer; /* Pointer cursor */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  }
+  
+  .google_btn img {
+    width: 20px; /* Icon size */
+    height: 20px;
+  }
+  
+  .google_btn span {
+    font-family: Arial, sans-serif; /* Use a clean font */
+  }
+  
+  .google_btn:hover {
+    background-color: #f7f8fa; /* Slightly darker background on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
+  }
+  
+  .google_btn:active {
+    background-color: #eceff1; /* Even darker background on click */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Reduce shadow */
+  }
+  
+  .google_btn:focus {
+    outline: none; /* Remove the default outline */
+    border-color: #4285f4; /* Add Google Blue color on focus */
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.3); /* Add a blue glow */
+  }
+  

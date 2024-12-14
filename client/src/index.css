@@ -27,17 +27,6 @@ code {
 
 
 
-.vinfo p {
-  padding: 0;
-  margin: 0;
-}
-
-span {
-  position: absolute;
-  right: 0px;
-  top: 0;
-  cursor: pointer;
-}
 /*# sourceMappingURL=index.css.map */
 .flex{
   display: flex;
