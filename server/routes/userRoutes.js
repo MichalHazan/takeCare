@@ -23,6 +23,8 @@ router.post("/register", async (req, res) => {
     gender,
     birthDate,
     location, // { type: 'Point', coordinates: [longitude, latitude] }
+    cityName,
+    streetName,
     role,
     professions,
     services,
@@ -67,6 +69,8 @@ router.post("/register", async (req, res) => {
       role,
       location,
       birthDate,
+      cityName,
+      streetName,
     });
 
     // Save the user to the database

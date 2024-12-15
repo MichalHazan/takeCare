@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({
         },
         coordinates: { type: [Number], required: true } // [longitude, latitude]
     },
+    cityName:{ type: String, required: true },
+    streetName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

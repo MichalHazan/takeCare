@@ -11,13 +11,15 @@ Register a Professional
   "phone": "9876543210",
   "role": "professional",
   "location": { "type": "Point", "coordinates": [34.781768, 32.085300] }, // [longitude, latitude],
-  "gender": "female"
+  "gender": "female",
   "professions": ["fitness trainer", "yoga"],
   "services": { "inPerson": true, "viaZoom": true },
   "description": "Certified trainer specializing in yoga and fitness.",
   "images": ["image1.jpg", "image2.jpg"],
   "hourlyRate": 60,
-   "birthDate": "1990-01-22"
+   "birthDate": "1990-01-22",
+   "cityName": "ראשון לציון",
+  "streetName":"נורדאו",
 }
 Register a Customer 
 {
@@ -29,7 +31,9 @@ Register a Customer
   "role": "customer",
   "location": { "type": "Point", "coordinates": [35.2137, 31.7683] } // coordinates: [longitude, latitude],
   "gender": "male",
-   "birthDate": "1990-01-22"
+   "birthDate": "1990-01-22",
+   "cityName": "ראשון לציון",
+  "streetName":"נורדאו"
 }
 
 Get all proffiaionsl:
