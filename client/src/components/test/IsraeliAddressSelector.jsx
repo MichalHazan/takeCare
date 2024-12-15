@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Autocomplete, TextField } from '@mui/material';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Autocomplete, TextField } from "@mui/material";
+import PropTypes from "prop-types";
 
 // Constants
 const API_URL = "https://data.gov.il/api/3/action/datastore_search";
@@ -22,17 +22,20 @@ const IsraeliAddressSelector = () => {
     if (!city || !street) return null;
 
     try {
-      const response = await axios.get('https://nominatim.openstreetmap.org/search', {
-        params: {
-          q: `${street}, ${city}, Israel`,
-          format: 'json',
-          limit: 1
+      const response = await axios.get(
+        "https://nominatim.openstreetmap.org/search",
+        {
+          params: {
+            q: `${street}, ${city}, Israel`,
+            format: "json",
+            limit: 1,
+          },
         }
-      });
+      );
 
       if (response.data && response.data.length > 0) {
-        const { lon, lat } = response.data[0];
-        return [parseFloat(lon), parseFloat(lat)];
+        const { lat, lon } = response.data[0];
+        return [parseFloat(lat), parseFloat(lon)];
       }
       return null;
     } catch (error) {
@@ -46,16 +49,16 @@ const IsraeliAddressSelector = () => {
     const fetchCities = async () => {
       try {
         const response = await axios.get(API_URL, {
-          params: { 
-            resource_id: CITIES_RESOURCE_ID, 
-            limit: 32000 
-          }
+          params: {
+            resource_id: CITIES_RESOURCE_ID,
+            limit: 32000,
+          },
         });
-        
+
         const cityNames = response.data.result.records
           .map((city) => city[CITY_NAME_KEY].trim())
           .sort();
-        
+
         setCities(cityNames);
       } catch (error) {
         console.error("Failed to fetch cities", error);
@@ -74,26 +77,29 @@ const IsraeliAddressSelector = () => {
 
       try {
         const queryParam = JSON.stringify({
-          [CITY_NAME_KEY]: selectedCity
+          [CITY_NAME_KEY]: selectedCity,
         });
 
         const response = await axios.get(API_URL, {
-          params: { 
-            resource_id: STREETS_RESOURCE_ID, 
+          params: {
+            resource_id: STREETS_RESOURCE_ID,
             q: queryParam,
-            limit: 32000 
+            limit: 32000,
           },
-          paramsSerializer: params => {
+          paramsSerializer: (params) => {
             return Object.entries(params)
-              .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-              .join('&');
-          }
+              .map(
+                ([key, value]) =>
+                  `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+              )
+              .join("&");
+          },
         });
-        
+
         const streetNames = response.data.result.records
           .map((street) => street[STREET_NAME_KEY].trim())
           .sort();
-        
+
         setStreets(streetNames);
       } catch (error) {
         console.error("Failed to fetch streets", error);
@@ -127,16 +133,16 @@ const IsraeliAddressSelector = () => {
             setCoordinates(null);
           }}
           renderInput={(params) => (
-            <TextField 
-              {...params} 
-              label="בחר עיר" 
-              variant="outlined" 
-              fullWidth 
+            <TextField
+              {...params}
+              label="בחר עיר"
+              variant="outlined"
+              fullWidth
             />
           )}
         />
       </div>
-      
+
       <div style={{ marginBottom: 16 }}>
         <Autocomplete
           options={streets}
@@ -144,11 +150,11 @@ const IsraeliAddressSelector = () => {
           onChange={(_, newValue) => setSelectedStreet(newValue)}
           disabled={!selectedCity}
           renderInput={(params) => (
-            <TextField 
-              {...params} 
-              label="בחר רחוב" 
-              variant="outlined" 
-              fullWidth 
+            <TextField
+              {...params}
+              label="בחר רחוב"
+              variant="outlined"
+              fullWidth
               disabled={!selectedCity}
             />
           )}
@@ -159,7 +165,7 @@ const IsraeliAddressSelector = () => {
         <div>
           <TextField
             label="קואורדינטות"
-            value={`Longitude: ${coordinates[0]}, Latitude: ${coordinates[1]}`}
+            value={`Latitude: ${coordinates[0]}, Longitude: ${coordinates[1]}`}
             variant="outlined"
             fullWidth
             InputProps={{
