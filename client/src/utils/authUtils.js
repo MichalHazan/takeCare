@@ -1,4 +1,3 @@
-import axiosInstance from '../api/axiosConfig';
 import { jwtDecode } from "jwt-decode";
 
 export const checkLogin = () => {
@@ -48,39 +47,9 @@ export const isTokenExpired = (token) => {
   }
 };
 
-// Refresh token
-export const refreshToken = async () => {
-  try {
-    const response = await axiosInstance.post('/api/auth/refresh-token', {
-      token: localStorage.getItem('token')
-    });
-    
-    const { token } = response.data;
-    localStorage.setItem('token', token);
-    return token;
-  } catch (error) {
-    // Logout user if refresh fails
-    logoutUser();
-    return null;
-  }
-};
 
 // Logout user
 export const logoutUser = () => {
-  localStorage.removeItem('token');
-  window.location.href = '/login';
-};
-
-// Logout from Google
-export const googleLogout = () => {
-  // Clear local storage
-  localStorage.removeItem('token');
-  
-  // If using @react-oauth/google
-  if (window.google) {
-    window.google.accounts.id.revoke();
-  }
-  
-  // Redirect to login
+  localStorage.removeItem('accessToken');
   window.location.href = '/login';
 };

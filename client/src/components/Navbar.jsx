@@ -17,7 +17,6 @@ import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../api/axiosConfig";
 import profileicon from '../images/profileicon.png';
-import { googleLogout } from '@react-oauth/google';
 
 export default function Navbar() {
   const { toggleLanguage } = useLanguage();
@@ -51,12 +50,10 @@ const settings = [{label: t("profile"), path: "profile"}, {label: t("Logout"), p
   };
   // -----------------------
   const logout = async () => {
-    googleLogout(); 
     try {
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
-      const response = await axiosInstance.post("/api/auth/logout");
+      const response = await axiosInstance.post("/api/users/logout");
       localStorage.clear();
       navigate("/login");
     } catch (err) {
