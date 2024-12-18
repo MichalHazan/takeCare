@@ -6,6 +6,19 @@ import axiosInstance from "../../api/axiosConfig";
 import { checkLogin } from "../../utils/authUtils";
 import styles from "./styles.module.css";
 import { Link } from "react-router-dom";
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    pinkCare: {
+      main: '#ffabab',
+      light: '#f9caca',
+      dark: '#fd9999',
+      contrastText: '#604645',
+    },
+  },
+});
+
 
 const Login = () => {
   const { t } = useTranslation();
@@ -49,7 +62,7 @@ const Login = () => {
       justifyContent="center"
       height="100vh"
     >
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
         {t("Login")}
       </Typography>
 
@@ -57,6 +70,7 @@ const Login = () => {
 
       <form onSubmit={handleSubmit} style={{ width: "300px" }}>
         <TextField
+        color="pinkCare"
           label={t("Email or Username")} // Updated label
           variant="outlined"
           fullWidth
@@ -65,6 +79,7 @@ const Login = () => {
           onChange={(e) => setLogin(e.target.value)} // Changed from setEmail to setLogin
         />
         <TextField
+        color="pinkCare"
           label={t("password")}
           type="password"
           variant="outlined"
@@ -73,14 +88,10 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" color="primary" type="submit" fullWidth>
+        <Button variant="contained" color="pinkCare" type="submit" fullWidth sx={{ fontWeight: "bold" }}>
           {t("Login")}
         </Button>
       </form>
-
-      <Typography variant="body1" gutterBottom>
-        {t("or")}
-      </Typography>
 
       <p className={styles.text}>
         {t("New Here")} ? <Link to="/register">{t("register")}</Link>
