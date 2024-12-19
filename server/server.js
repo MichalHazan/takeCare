@@ -17,34 +17,15 @@ const app = express();
 
 // Middleware
 app.use(bodyParser.json());
-const helmet = require('helmet');
 
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'https://accounts.google.com', 'https://apis.google.com'],
-    frameSrc: ["'self'", 'https://accounts.google.com'],
-    frameAncestors: ["'self'", 'https://accounts.google.com']
-  }
-}));
 
 const corsOptions = {
-    origin: [
-        'http://localhost:3000', // Your frontend URL
-        'http://localhost:5174', // Another possible frontend URL if you have multiple
-        'http://127.0.0.1:3000',
-        'http://localhost:3001'
-    ],
+    origin: true,
     credentials: true,
-    allowedHeaders: [
-        'Content-Type', 
-        'Authorization', 
-        'X-Requested-With', 
-        'Accept'
-    ],
-    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 };
+app.use(express.json());
 app.use(cors(corsOptions));
 
 //--testing---
@@ -75,12 +56,10 @@ app.get("/", (req, res) => {
 
 // Routes
 const userRoutes = require("./routes/userRoutes");
-const authGoogle = require("./routes/authGoogle");
 const reviewRoutes = require('./routes/reviewRoutes');
 
 app.use('/api/reviews', reviewRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/auth", authGoogle);
 
 // Start the server
 app.listen(PORT, () =>

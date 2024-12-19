@@ -5,31 +5,42 @@ import { useNavigate } from "react-router-dom";
 const AdminPage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setUser(getLoggedInUser());
-    // If no token is found, redirect to the login page
+    // Check login first
     if (!checkLogin()) {
       navigate("/login");
       return;
     }
-    if (user) {
-      // Check if the user has the correct role (admin in this case)
-      if (user.role !== "admin") {
-        // Redirect to a forbidden page or another page for non-admin users
+
+    // Get logged-in user
+    const loggedInUser = getLoggedInUser();
+    
+    if (loggedInUser) {
+      // Check user role
+      if (loggedInUser.role !== "admin") {
         setError("Access denied. You do not have the right permissions.");
-        navigate("/");
       }
+      
+      // Set user state
+      setUser(loggedInUser);
+    } else {
+      // No user found
+      navigate("/login");
     }
+
+    // Set loading to false
+    setIsLoading(false);
   }, [navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (error) {
     return <div>{error}</div>;
-  }
-
-  if (!user) {
-    return <div>Loading...</div>;
   }
 
   return (
