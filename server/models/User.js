@@ -22,8 +22,10 @@ const userSchema = new mongoose.Schema({
             enum: ['Point'], 
             default: 'Point' 
         },
-        coordinates: { type: [Number], required: true } // [longitude, latitude]
+        coordinates: { type: [Number], required: true } // [Latitude, Longitude]
     },
+    cityName:{ type: String, required: true },
+    streetName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
