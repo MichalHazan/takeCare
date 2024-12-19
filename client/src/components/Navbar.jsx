@@ -53,7 +53,6 @@ const settings = [{label: t("profile"), path: "profile"}, {label: t("Logout"), p
     try {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
-      const response = await axiosInstance.post("/api/users/logout");
       const response = await axiosInstance.delete("/api/users/logout");
       localStorage.clear();
       navigate("/login");
