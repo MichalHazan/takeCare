@@ -6,18 +6,6 @@ import axiosInstance from "../../api/axiosConfig";
 import { checkLogin } from "../../utils/authUtils";
 import styles from "./styles.module.css";
 import { Link } from "react-router-dom";
-import { createTheme } from '@mui/material/styles';
-
-const theme = createTheme({
-  palette: {
-    pinkCare: {
-      main: '#ffabab',
-      light: '#f9caca',
-      dark: '#fd9999',
-      contrastText: '#604645',
-    },
-  },
-});
 
 
 const Login = () => {
