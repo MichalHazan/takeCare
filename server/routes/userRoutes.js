@@ -177,10 +177,14 @@ router.get("/allprofessional", getProfessionals);
 
 // Get professional by ID
 router.get("/proffessional/:professionalId", getProfessionalById);
-
 // Update user details
-router.put("/update/:userId", onlyUsers, async (req, res) => {
+router.put("/update/:userId", async (req, res) => {
   const { userId } = req.params;
+  console.log('userId',userId)
+  console.log('========================')
+
+  console.log('req.params',req.params)
+  //const { userId } = req.params;
   const {
     fullname,
     username,
@@ -189,20 +193,19 @@ router.put("/update/:userId", onlyUsers, async (req, res) => {
     gender,
     birthDate,
     //address,
-    location,
     professions,
     services,
     description,
     images,
     hourlyRate,
   } = req.body;
-
+console.log('req.session.user',req.session)
   try {
-    if (req.session.user.id !== userId) {
-      return res
-        .status(403)
-        .json({ message: "You are not authorized to update this user." });
-    }
+    // if (req.session.user.id !== userId) {
+    //   return res
+    //     .status(403)
+    //     .json({ message: "You are not authorized to update this user." });
+    // }
 
     const user = await User.findById(userId);
     if (!user) {
@@ -215,7 +218,6 @@ router.put("/update/:userId", onlyUsers, async (req, res) => {
     user.phone = phone || user.phone;
     user.gender = gender || user.gender;
     user.birthDate = birthDate || user.birthDate;
-    user.location = location || user.location;
 
     const updatedUser = await user.save();
 

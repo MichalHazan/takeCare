@@ -38,9 +38,7 @@ export default function Feed() {
                 console.log("fetchUserDetails updated::");
                 console.log('loginUser',loginUser)
                 if (loginUser && loginUser.id) { // Ensure user ID exists before making the call
-                    console.log('AA')
-                    const response = await axiosInstance.get(`http://localhost:2000/api/users/user/${loginUser.id}`);
-                    console.log('BB')
+                    const response = await axiosInstance.get(`/api/users/user/${loginUser.id}`);
                     console.log('User Details:', response.data);
                     setUserDetails(response.data);
                 }

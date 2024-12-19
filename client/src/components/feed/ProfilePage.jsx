@@ -1,24 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { Box, Typography, Divider, Paper, IconButton } from "@mui/material";
-import { useLanguage } from "../../context/LanguageContext"; // Importing language context for RTL/LTR direction
-import { useTranslation } from "react-i18next"; // Importing translation functionality
-import {jwtDecode} from "jwt-decode"; // Importing JWT decoding library
+import { Box, Typography, Divider, Paper, IconButton, TextField, Button } from "@mui/material";
+import { useLanguage } from "../../context/LanguageContext";
+import { useTranslation } from "react-i18next";
+import {jwtDecode} from "jwt-decode";
+import axiosInstance from "../../api/axiosConfig";
 
 const ProfilePage = ({ userDetails }) => {
-    const { language } = useLanguage(); // Retrieves the current language setting (e.g., "he" or "en")
-    const { t } = useTranslation(); // Translation function for multi-language support
+    const { language } = useLanguage();
+    const { t } = useTranslation();
 
-    // Extract the userId from the access token
-    const accessToken = localStorage.getItem("accessToken"); // Retrieve the token from localStorage
+    // State to handle editable field
+    const [editableField, setEditableField] = useState(null);
+    const [fieldValue, setFieldValue] = useState("");
+
+    // Extract userId from access token
+    const accessToken = localStorage.getItem("accessToken");
     let loggedInUserId = null;
-
     if (accessToken) {
-        const decodedToken = jwtDecode(accessToken); // Decode the JWT token
-        loggedInUserId = decodedToken.id; // Extract userId from the token payload
+        const decodedToken = jwtDecode(accessToken);
+        loggedInUserId = decodedToken.id;
     }
 
-    // Display a loading message if userDetails are not yet available
+    // Display loading message if userDetails are not available
     if (!userDetails) {
         return (
             <Box
@@ -29,33 +33,49 @@ const ProfilePage = ({ userDetails }) => {
                     height: "100%",
                 }}
             >
-                <Typography>Loading...</Typography>
+                <Typography>{t("Loading...")}</Typography>
             </Box>
         );
     }
+
+    // Handle save for the edited field
+    const handleSave = async () => {
+        const updatedField = {
+            [editableField]: fieldValue,
+        };
+        try {
+            const response = await axiosInstance.put(
+                `/api/users/update/${loggedInUserId}`,
+                updatedField
+            );
+            console.log("Updated user details:", response.data);
+        } catch (error) {
+            console.error("Error updating user details:", error.response?.data || error.message);
+        }
+        setEditableField(null);
+    };
 
     return (
         <Paper
             elevation={3}
             sx={{
-                direction: language === "he" ? "rtl" : "ltr", // Change text direction based on language
-                borderRadius: "10px", // Rounded corners for the Paper component
-                padding: 2, // Inner spacing
-                margin: "10px", // Outer spacing
-                backgroundColor: "white", // White background color
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)", // Subtle shadow for elevation
+                direction: language === "he" ? "rtl" : "ltr",
+                borderRadius: "10px",
+                padding: 2,
+                margin: "10px",
+                backgroundColor: "white",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             }}
         >
-            {/* Mapping through an array of profile details */}
             {[
-                { title: t("ID"), value: userDetails?.user?._id || t("Not provided") },
-                { title: t("Full name"), value: userDetails?.user?.fullname || t("Not provided") },
-                { title: t("Experience"), value: userDetails?.professionalDetails?.professions || t("Not provided") },
-                { title: t("About me"), value: userDetails?.professionalDetails?.description || t("Not provided") },
-                { title: t("Price range"), value: userDetails?.professionalDetails?.hourlyRate || t("Not provided") },
+                { title: t("Full name"), value: userDetails?.user?.fullname || t("Not provided"), field: "fullname" },
+                { title: t("Experience"), value: userDetails?.professionalDetails?.professions?.join(", ") || t("Not provided"), field: "professions" },
+                { title: t("About me"), value: userDetails?.professionalDetails?.description || t("Not provided"), field: "description" },
+                { title: t("Price range"), value: userDetails?.professionalDetails?.hourlyRate || t("Not provided"), field: "hourlyRate" },
                 {
                     title: t("Location"),
-                    value: userDetails?.professionalDetails?.location || t("Not provided"),
+                    value: `${userDetails?.user?.cityName || t("Not provided")}, ${userDetails?.user?.streetName || t("Not provided")}`,
+                    field: "location",
                 },
                 {
                     title: t("Contact details"),
@@ -64,23 +84,42 @@ const ProfilePage = ({ userDetails }) => {
                 },
             ].map((item, index) => (
                 <Box key={index} sx={{ marginBottom: 2 }}>
-                    {/* Title with optional edit icon */}
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <Typography variant="subtitle2" fontWeight="bold">
-                            {item.title} {/* Translated title */}
+                            {item.title}
                         </Typography>
-                        {/* Display edit icon only if logged-in user matches the userDetails ID */}
                         {userDetails?.user?._id === loggedInUserId && (
-                            <IconButton>
+                            <IconButton
+                                onClick={() => {
+                                    setEditableField(item.field);
+                                    setFieldValue(item.value);
+                                }}
+                            >
                                 <BorderColorIcon fontSize="small" sx={{ color: "#AB9798" }} />
                             </IconButton>
                         )}
                     </Box>
-                    {/* Display the value of each field */}
-                    <Typography sx={{ whiteSpace: "pre-line" }}>
-                        {item.value}
-                    </Typography>
-                    {/* Divider for separation */}
+                    {editableField === item.field ? (
+                        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                            <TextField
+                                fullWidth
+                                value={fieldValue}
+                                onChange={(e) => setFieldValue(e.target.value)}
+                            />
+                            <Button variant="contained" size="small" onClick={handleSave}>
+                                {t("Save")}
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                onClick={() => setEditableField(null)}
+                            >
+                                {t("Cancel")}
+                            </Button>
+                        </Box>
+                    ) : (
+                        <Typography sx={{ whiteSpace: "pre-line" }}>{item.value}</Typography>
+                    )}
                     <Divider sx={{ marginY: 1 }} />
                 </Box>
             ))}
