@@ -28,3 +28,34 @@ code {
 
 
 /*# sourceMappingURL=index.css.map */
+.flex{
+  display: flex;
+  justify-content: space-between ;
+  padding: auto;
+}
+.flex1{
+
+  display: flex;
+  flex-direction: column;
+  padding: auto;
+  width: 30%;
+}
+.flex2{
+
+  display: grid;
+  grid-row: auto auto auto auto !important;
+  justify-content: space-between;
+}
+/* index.css */
+@import "~leaflet/dist/leaflet.css";
+*{
+  box-sizing: border-box;
+
+}
+#root{
+  height: 100vh;
+}
+label{
+  color: blue;
+
+}
