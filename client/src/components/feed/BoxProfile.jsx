@@ -1,4 +1,3 @@
-//ProfilePage
 import React, { useState } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Typography, Divider, Paper, IconButton, TextField, Button } from "@mui/material";
@@ -6,7 +5,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../../api/axiosConfig";
 
-const ProfilePage = ({ userDetails }) => {
+const BoxProfile = ({ userDetails }) => {
     const { language } = useLanguage();
     const { t } = useTranslation();
 
@@ -103,5 +102,4 @@ const ProfilePage = ({ userDetails }) => {
     );
 };
 
-
-export default ProfilePage;
+export default BoxProfile;
