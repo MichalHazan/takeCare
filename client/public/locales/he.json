@@ -1,7 +1,7 @@
 {
   "welcome": "ברוכים הבאים לאתר שלנו!",
   "description": "זו אפליקציה עם תמיכה בשפות שונות.",
-  "Login": "כניסה",
+  "Login": "התחברות",
   "Connect with yourself and your world of content": "התחבר לעצמך ולעולם התוכן שלך",
   "By continuing, you agree to Take Care's User Agreement and Privacy Policy": "בכניסה, אתה מסכים להסכם המשתמש ולמדיניות הפרטיות של 'Take Care'",
   "New to Take Care": "חדש ב-Take Care",
@@ -43,15 +43,8 @@
   "Hourly Rate": "תעריף שעתי",
   "Search by description": "חפש לפי תיאור",
   "Apply Filters": "החל סינון",
-  "Full Name": "שם מלא",
-  "Username": "שם משתמש",
-  "Phone": "טלפון",
-  "Full name": "שם מלא",
-  "ID": "תעודת זהות",
-  "Experience": "ניסיון מקצועי",
-  "About me": "קצת על עצמי",
-  "Price range": "טווח מחירים",
-  "Location": "מיקום",
-  "Contact details": "דרכי התקשרות",
-  "Not provided": "לא נמסר"
+  "Full Name":"שם מלא",
+  "Username":" שם משתמש",
+  "Phone":"טלפון",
+  "Email or Username": "שם משתמש או מייל"
 }

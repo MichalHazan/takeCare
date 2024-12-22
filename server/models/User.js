@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     fullname: { type: String, required: true },
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     phone: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     gender: { 
@@ -22,10 +22,10 @@ const userSchema = new mongoose.Schema({
             enum: ['Point'], 
             default: 'Point' 
         },
-        coordinates: { type: [Number], required: true } // [longitude, latitude]
+        coordinates: { type: [Number], required: true } // [Latitude, Longitude]
     },
-    cityName:{ type: String},
-    streetName: { type: String},
+    cityName:{ type: String, required: true },
+    streetName: { type: String, required: true },
     birthDate: { type: Date, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }

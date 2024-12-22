@@ -23,7 +23,9 @@ router.post("/register", async (req, res) => {
     phone,
     gender,
     birthDate,
-    location,
+    location, // { type: 'Point', coordinates: [longitude, latitude] }
+    cityName,
+    streetName,
     role,
     professions,
     services,
@@ -71,6 +73,8 @@ router.post("/register", async (req, res) => {
       role,
       location,
       birthDate,
+      cityName,
+      streetName,
     });
 
     // Save the user to the database
@@ -101,25 +105,33 @@ router.post("/register", async (req, res) => {
 
 // Login a user
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-console.log(req.body)
+  const { login, password } = req.body; 
+
   try {
-    const user = await User.findOne({ email });
+    // Find user by either email or username
+    const user = await User.findOne({
+      $or: [
+        { email: login },
+        { username: login }
+      ]
+    });
+
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email/username or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email/username or password" });
     }
 
+    // Create a JWT token with the user's id and role
     const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "24h" }
+      { id: user._id, role: user.role }, 
+      process.env.JWT_SECRET
     );
 
+    // Store user data in session
     req.session.user = {
       id: user._id,
       username: user.username,
@@ -167,9 +179,14 @@ router.get("/user/:userId", async (req, res) => {
 });
 
 // Logout a user
-router.delete("/logout", onlyUsers, (req, res) => {
-  req.session.destroy();
-  res.send({ msg: "bye bye" });
+router.post("/logout", onlyUsers, (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: 'Failed to log out.' });
+    }
+    res.clearCookie('tackecare'); // Clear session cookie
+    res.json({ message: 'Logout successful' });
+  });
 });
 
 // Get all professionals
