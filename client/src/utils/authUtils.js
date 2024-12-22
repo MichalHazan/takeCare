@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 
 export const checkLogin = () => {
   const token = localStorage.getItem("accessToken");
-  const token = localStorage.getItem("accessToken");
   // Return false if no token exists
   if (!token) {
     return false;
