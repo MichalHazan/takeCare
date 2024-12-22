@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid } from "@mui/material";
 import ImageLayout from "./ImageLayout";
-import ProfilePage from "./ProfilePage";
-import Recommendations from "./Recommendations";
+import ProfilePage from "../profile/ProfilePage";
+import Recommendations from "../profile/Recommendations";
 import { checkLogin, getLoggedInUser } from '../../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
