@@ -57,9 +57,11 @@ app.get("/", (req, res) => {
 // Routes
 const userRoutes = require("./routes/userRoutes");
 const reviewRoutes = require('./routes/reviewRoutes');
+const galeryRoutes = require('./routes/galeryRoutes');
 
 app.use('/api/reviews', reviewRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/galery", galeryRoutes);
 
 // Start the server
 app.listen(PORT, () =>
