@@ -14,6 +14,7 @@ const onlyUsers = require("../middleware/onlyUsers");
 
 // Register a new user
 router.post("/register", async (req, res) => {
+  //console.log(req)
   const {
     fullname,
     username,
@@ -32,17 +33,20 @@ router.post("/register", async (req, res) => {
     images,
     hourlyRate,
   } = req.body;
+
   try {
     if (role === "professional" && (!professions || professions.length === 0)) {
       return res
         .status(400)
         .json({ message: "Professionals must specify their professions" });
     }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
+
     // Validate location
     if (
       !location ||
@@ -76,7 +80,7 @@ router.post("/register", async (req, res) => {
     // Save the user to the database
     const savedUser = await newUser.save();
 
-    //  create a Professional profile
+    // Create a Professional profile if role is professional
     if (role === "professional") {
       const newProfessional = new Professional({
         userId: savedUser._id,
@@ -116,7 +120,6 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email/username or password" });
     }
 
-    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email/username or password" });
@@ -146,6 +149,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Get user details
+router.get("/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+  console.log(userId)
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(userId).select("-password"); // Exclude password
+    console.log(user)
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If user is professional, fetch professional details
+    let professionalDetails = null;
+    if (user.role === "professional") {
+      professionalDetails = await Professional.findOne({ userId: user._id });
+    }
+
+    res.status(200).json({
+      user,
+      professionalDetails,
+    });
+  } catch (err) {
+    console.error("Error fetching user details:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // Logout a user
 router.post("/logout", onlyUsers, (req, res) => {
   req.session.destroy((err) => {
@@ -157,16 +189,75 @@ router.post("/logout", onlyUsers, (req, res) => {
   });
 });
 
-//get all proffiasonal
+// Get all professionals
 router.get("/allprofessional", getProfessionals);
-//get professional by id
+
+// Get professional by ID
 router.get("/proffessional/:professionalId", getProfessionalById);
+// Update user details
+router.put("/update/:userId", async (req, res) => {
+  const { userId } = req.params;
+  console.log('userId',userId)
+  console.log('========================')
 
-router.get("/admin", onlyAdmin, (req, res) => {
-  res.send({ msg: "hello admin" });
+  console.log('req.params',req.params)
+  //const { userId } = req.params;
+  const {
+    fullname,
+    username,
+    email,
+    phone,
+    gender,
+    birthDate,
+    //address,
+    professions,
+    services,
+    description,
+    images,
+    hourlyRate,
+  } = req.body;
+console.log('req.session.user',req.session)
+  try {
+    // if (req.session.user.id !== userId) {
+    //   return res
+    //     .status(403)
+    //     .json({ message: "You are not authorized to update this user." });
+    // }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.fullname = fullname || user.fullname;
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phone = phone || user.phone;
+    user.gender = gender || user.gender;
+    user.birthDate = birthDate || user.birthDate;
+
+    const updatedUser = await user.save();
+
+    if (user.role === "professional") {
+      const professional = await Professional.findOne({ userId: user._id });
+      if (professional) {
+        professional.professions = professions || professional.professions;
+        professional.services = services || professional.services;
+        professional.description = description || professional.description;
+        professional.images = images || professional.images;
+        professional.hourlyRate = hourlyRate || professional.hourlyRate;
+
+        await professional.save();
+      }
+    }
+
+    res
+      .status(200)
+      .json({ message: "User updated successfully", user: updatedUser });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-router.get("/test", onlyProfessional, (req, res) => {
-  res.send({ msg: "hello test" });
-});
 module.exports = router;
