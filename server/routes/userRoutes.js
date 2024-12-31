@@ -11,6 +11,12 @@ const {
 const onlyAdmin = require("../middleware/onlyAdmin");
 const onlyProfessional = require("../middleware/onlyProfessional");
 const onlyUsers = require("../middleware/onlyUsers");
+///////////////
+const uploadToCloudinary = require('../middleware/uploadToCloudinary');
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+const app = express();
+//////////////////
 
 // Register a new user
 router.post("/register", async (req, res) => {
@@ -169,6 +175,7 @@ router.get("/user/:userId", async (req, res) => {
     }
 
     res.status(200).json({
+
       user,
       professionalDetails,
     });
@@ -195,13 +202,15 @@ router.get("/allprofessional", getProfessionals);
 // Get professional by ID
 router.get("/proffessional/:professionalId", getProfessionalById);
 // Update user details
-router.put("/update/:userId", async (req, res) => {
+router.put("/update/:userId",upload.array("images", 10), uploadToCloudinary, async (req, res) => {
   const { userId } = req.params;
-  console.log('userId',userId)
-  console.log('========================')
+  // console.log('========================')
 
-  console.log('req.params',req.params)
-  //const { userId } = req.params;
+  // //console.log('req',req)
+  // console.log('========================')
+
+  // console.log('req.params',req.params)
+  // //const { userId } = req.params;
   const {
     fullname,
     username,
@@ -216,7 +225,6 @@ router.put("/update/:userId", async (req, res) => {
     images,
     hourlyRate,
   } = req.body;
-console.log('req.session.user',req.session)
   try {
     // if (req.session.user.id !== userId) {
     //   return res
@@ -244,20 +252,31 @@ console.log('req.session.user',req.session)
         professional.professions = professions || professional.professions;
         professional.services = services || professional.services;
         professional.description = description || professional.description;
-        professional.images = images || professional.images;
+        //professional.images = images || professional.images;
         professional.hourlyRate = hourlyRate || professional.hourlyRate;
+///////////////////////////////////////////////
 
+        if (req.uploadedUrls) {
+          console.log('req.uploadedUrls',req.uploadedUrls)
+          //console.log("Images uploaded successfully:", req.uploadedUrls);
+
+          professional.images = professional.images || [];
+          professional.images.push(...req.uploadedUrls); // הוספת תמונות ל-proffesional
+          //professional.images =[]
+        } else {
+          //console.error("No images were uploaded");//ששורה זאת תתבצע רק אם לא נשלחה בקשה לעדכון משהו אחר
+        }
+
+        // שמירת הנתונים
         await professional.save();
-      }
-    }
+        }
+        }
 
-    res
-      .status(200)
-      .json({ message: "User updated successfully", user: updatedUser });
-  } catch (err) {
-    console.error("Error updating user:", err);
-    res.status(500).json({ message: "Server error" });
-  }
+      return res.status(200).json({ message: "User updated successfully", user: updatedUser });
+        } catch (err) {
+        console.error("Error updating user:", err);
+        if (!res.headersSent) {
+      return res.status(500).json({ message: "Server error" });
+      }}
 });
-
 module.exports = router;

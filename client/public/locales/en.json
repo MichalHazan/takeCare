@@ -36,5 +36,9 @@
   "Price range": "Price Range",
   "Location": "Location",
   "Contact details": "Contact Details",
-  "Not provided": "Not provided"
+  "Not provided": "Not provided",
+  "City Name": "City",
+  "Street Name": "Street",
+  "Professional Experience": "Professional Experience",
+  "Description": "Description"
 }

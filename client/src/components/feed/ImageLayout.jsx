@@ -1,70 +1,91 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
-const ImageLayout = () => {
+const ImageGallery = ({ images = [] }) => {
+    // Ensure the array contains at least 6 slots, even if there aren't enough images
+    const imageList = images.map((image) => {
+        try {
+            return JSON.parse(image);
+        } catch (e) {
+            console.error("Invalid image JSON:", image);
+            return null;
+        }
+    }).filter((image) => image !== null); // Filter out invalid entries
+
+    const paddedImages = imageList.length < 9 ? [...imageList, ...Array(9 - imageList.length).fill(null)] : imageList;
+    const slicedImages = paddedImages.slice(0, 20); // Always ensure only 6 items
+
+    const fileNameUrl = (urlImage) => {
+        // Extract the file name from the URL
+        return decodeURIComponent(
+            urlImage.substring(urlImage.lastIndexOf('/') + 1, urlImage.lastIndexOf('.'))
+        );
+    };
+
     return (
         <Box
             sx={{
-                margin: "10px",
-                display: "flex",
-                height: "100vh",
-                backgroundColor: "#eee",
-                justifyContent: "center", // Center horizontally
-                alignItems: "flex-start", // Align to the top vertically
-                paddingTop: 2, // Optional padding for some spacing at the top
+                display: "grid", // Use grid layout to display images
+                gridTemplateColumns: "repeat(3, 1fr)", // Three columns
+                gap: 2, // Spacing between grid items
+                padding: 2,
             }}
         >
-            {/* Image Container */}
-            <Box
-                sx={{
-                    width: "100%", // Full width of the container
-                    maxWidth: "100%", // Set a maximum width for layout
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)", // 3 images per row
-                    gap: 2, // Spacing between images
-                    padding: 2,
-                }}
-            >
-                {/* Grid of 6 images */}
-                {Array.from({ length: 6 }).map((_, index) => (
-                    <Box
-                        key={index}
-                        sx={{
-                            display: "flex",
-                            flexDirection: "column", // Stack image and text vertically
-                            alignItems: "center", // Center horizontally
-                            justifyContent: "flex-start", // Align items to top
-                            backgroundColor: "white",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                            paddingBottom: "10px", // Space below the image
-                        }}
-                    >
-                        {/* Image Placeholder */}
+            {slicedImages.map((image, index) => (
+                <Box
+                    key={index}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                        overflow: "hidden",
+                    }}
+                >
+                    {/* Display the image or a placeholder if no image exists */}
+                    {image ? (
+                        <Box
+                            component="img"
+                            src={image.secure_url}
+                            alt={`Image ${index + 1}`}
+                            sx={{
+                                width: "100%",
+                                height: "200px", // Fixed height for the image
+                                objectFit: "cover", // Ensures the image covers the box without distortion
+                            }}
+                        />
+                    ) : (
                         <Box
                             sx={{
-                                borderRadius: "8px",
-                                height: "150px", // Fixed height for the images
-                                width: "100%", // Make sure the image box fits container
-                                backgroundColor: "#ccc", // Placeholder background
+                                width: "100%",
+                                height: "200px",
+                                backgroundColor: "#e0e0e0", // Gray background for placeholder
                                 display: "flex",
-                                alignItems: "center",
                                 justifyContent: "center",
-                                marginBottom: "8px", // Space between image and text
+                                alignItems: "center",
                             }}
                         >
-                            <Typography>Image {index + 1}</Typography>
+                            <Typography variant="caption" sx={{ color: "#999" }}>
+                                No Image
+                            </Typography>
                         </Box>
+                    )}
 
-                        {/* Image Caption */}
-                        <Typography variant="caption" sx={{ color: "#555" }}>
-                            Caption for Image {index + 1}
+                    {/* Display the asset ID only if secure_url exists */}
+                    {image && (
+                        <Typography
+                            variant="caption"
+                            sx={{ padding: 1, color: "#555", textAlign: "center" }}
+                        >
+                            {fileNameUrl(image.secure_url)}
                         </Typography>
-                    </Box>
-                ))}
-            </Box>
+                    )}
+                </Box>
+            ))}
         </Box>
     );
 };
 
-export default ImageLayout;
+export default ImageGallery;

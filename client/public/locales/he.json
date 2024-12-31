@@ -46,5 +46,11 @@
   "Full Name":"שם מלא",
   "Username":" שם משתמש",
   "Phone":"טלפון",
-  "Email or Username": "שם משתמש או מייל"
+  "Email or Username": "שם משתמש או מייל",
+  "City Name": "עיר",
+  "Street Name": "רחוב",
+  "Professional Experience": "ניסיון מקצועי",
+  "Description": "תאור"
+
+
 }

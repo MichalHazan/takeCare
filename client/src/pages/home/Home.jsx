@@ -1,9 +1,10 @@
+//Home.jsx
 import { Box, Button, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { checkLogin } from "../../utils/authUtils";
-import Map from "../home/Map"
+// import Map from "../home/Map"
 import Filters from "./Filters";
 import Users from "./Users";
 
@@ -32,13 +33,13 @@ const Home = () => {
   }, []);
 
   return (
-    
-    <Box sx={{ display: "flex", justifyContent:"space-between", height: "200%", height: "93vh"}}>
-     
-      <Filters users={users} setFilteredUsers={setFilteredUsers} />
-      <Users filteredUsers={filteredUsers} />
-      <Map users={users} ></Map>
-    </Box>
+
+      <Box sx={{ display: "flex", justifyContent: "space-between", height: "93vh" }}>
+          <Filters users={users} setFilteredUsers={setFilteredUsers} />
+          <Users filteredUsers={filteredUsers} />
+          {/*<Map users={users} />*/}
+      </Box>
+
   );
 };
 

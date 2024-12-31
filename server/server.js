@@ -1,3 +1,5 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -5,6 +7,7 @@ const connectDB = require("./config/db");
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 2000;
+
 
 // Load environment variables
 dotenv.config();
