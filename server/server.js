@@ -7,7 +7,9 @@ const connectDB = require("./config/db");
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 2000;
-
+const fs = require("fs");
+const path = require("path");
+//const uploads = require('./uploads')
 
 // Load environment variables
 dotenv.config();
@@ -63,6 +65,8 @@ const reviewRoutes = require('./routes/reviewRoutes');
 
 app.use('/api/reviews', reviewRoutes);
 app.use("/api/users", userRoutes);
+// הגדרת תיקיית uploads כסטטית
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Start the server
 app.listen(PORT, () =>

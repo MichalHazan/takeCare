@@ -8,8 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../../api/axiosConfig";
 
-const imageT=["","","","",""]
-
 
 export default function Feed() {
     const { t } = useTranslation();
@@ -100,7 +98,7 @@ export default function Feed() {
                     }}
                 >
                     {imagesDetails ? (
-                        <ImageLayout images={imagesDetails} />
+                        <ImageLayout initialImages ={imagesDetails} userId={loginUser.id}/>
                     ) : (
                         <div>
                             Loading images...

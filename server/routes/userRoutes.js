@@ -15,12 +15,13 @@ const onlyUsers = require("../middleware/onlyUsers");
 const uploadToCloudinary = require('../middleware/uploadToCloudinary');
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
+//const upload = require("../middleware/upload");
+
 const app = express();
 //////////////////
 
 // Register a new user
 router.post("/register", async (req, res) => {
-  //console.log(req)
   const {
     fullname,
     username,
@@ -111,7 +112,7 @@ router.post("/register", async (req, res) => {
 
 // Login a user
 router.post("/login", async (req, res) => {
-  const { login, password } = req.body; 
+  const { login, password } = req.body;
 
   try {
     // Find user by either email or username
@@ -133,7 +134,7 @@ router.post("/login", async (req, res) => {
 
     // Create a JWT token with the user's id and role
     const token = jwt.sign(
-      { id: user._id, role: user.role }, 
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET
     );
 
@@ -158,12 +159,12 @@ router.post("/login", async (req, res) => {
 // Get user details
 router.get("/user/:userId", async (req, res) => {
   const { userId } = req.params;
-  console.log(userId)
+  console.log(userId);
 
   try {
     // Find the user by ID
     const user = await User.findById(userId).select("-password"); // Exclude password
-    console.log(user)
+    console.log(user);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -175,7 +176,6 @@ router.get("/user/:userId", async (req, res) => {
     }
 
     res.status(200).json({
-
       user,
       professionalDetails,
     });
@@ -191,7 +191,7 @@ router.post("/logout", onlyUsers, (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to log out.' });
     }
-    res.clearCookie('tackecare'); // Clear session cookie
+    res.clearCookie('takecare'); // Clear session cookie
     res.json({ message: 'Logout successful' });
   });
 });
@@ -200,17 +200,12 @@ router.post("/logout", onlyUsers, (req, res) => {
 router.get("/allprofessional", getProfessionals);
 
 // Get professional by ID
-router.get("/proffessional/:professionalId", getProfessionalById);
+router.get("/professional/:professionalId", getProfessionalById);
+
 // Update user details
-router.put("/update/:userId",upload.array("images", 10), uploadToCloudinary, async (req, res) => {
+router.put("/update/:userId", async (req, res) => {
   const { userId } = req.params;
-  // console.log('========================')
 
-  // //console.log('req',req)
-  // console.log('========================')
-
-  // console.log('req.params',req.params)
-  // //const { userId } = req.params;
   const {
     fullname,
     username,
@@ -218,7 +213,6 @@ router.put("/update/:userId",upload.array("images", 10), uploadToCloudinary, asy
     phone,
     gender,
     birthDate,
-    //address,
     professions,
     services,
     description,
@@ -226,12 +220,6 @@ router.put("/update/:userId",upload.array("images", 10), uploadToCloudinary, asy
     hourlyRate,
   } = req.body;
   try {
-    // if (req.session.user.id !== userId) {
-    //   return res
-    //     .status(403)
-    //     .json({ message: "You are not authorized to update this user." });
-    // }
-
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -252,31 +240,168 @@ router.put("/update/:userId",upload.array("images", 10), uploadToCloudinary, asy
         professional.professions = professions || professional.professions;
         professional.services = services || professional.services;
         professional.description = description || professional.description;
-        //professional.images = images || professional.images;
+        professional.images = images || professional.images;
         professional.hourlyRate = hourlyRate || professional.hourlyRate;
-///////////////////////////////////////////////
 
-        if (req.uploadedUrls) {
-          console.log('req.uploadedUrls',req.uploadedUrls)
-          //console.log("Images uploaded successfully:", req.uploadedUrls);
-
-          professional.images = professional.images || [];
-          professional.images.push(...req.uploadedUrls); // הוספת תמונות ל-proffesional
-          //professional.images =[]
-        } else {
-          //console.error("No images were uploaded");//ששורה זאת תתבצע רק אם לא נשלחה בקשה לעדכון משהו אחר
-        }
-
-        // שמירת הנתונים
+        // Save the updated professional data
         await professional.save();
-        }
+      }
+    }
+
+    return res
+      .status(200)
+      .json({ message: "User updated successfully", user: updatedUser });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    if (!res.headersSent) {
+      return res.status(500).json({ message: "Server error" });
+    }
+  }
+});
+
+// Adding and updating images
+router.put(
+  "/updateImages/:userId",
+  upload.array("images", 10),
+  uploadToCloudinary,
+  //upload.processFiles,
+  async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (user.role === "professional") {
+        const professional = await Professional.findOne({ userId: user._id });
+        if (!professional) {
+          return res.status(404).json({ message: "Professional not found" });
         }
 
-      return res.status(200).json({ message: "User updated successfully", user: updatedUser });
-        } catch (err) {
-        console.error("Error updating user:", err);
-        if (!res.headersSent) {
+        if (!req.uploadedUrls || req.uploadedUrls.length === 0) {
+          return res.status(400).json({ message: "No images were uploaded" });
+        }
+
+        // Add new images
+        professional.images = professional.images || [];
+        professional.images.push(...req.uploadedUrls);
+
+        // Save updated professional
+        await professional.save();
+
+        return res.status(200).json({
+          message: "Images updated successfully",
+          images: professional.images,
+        });
+      } else {
+        return res
+          .status(403)
+          .json({ message: "Only professionals can upload images" });
+      }
+    } catch (err) {
+      console.error("Error updating images:", err);
       return res.status(500).json({ message: "Server error" });
-      }}
+    }
+  }
+);
+
+
+
+// Delete an image
+router.put("/DeleteImages/:userId", 
+  //upload.deleteFiles, 
+  uploadToCloudinary.deleteFiles,  async (req, res) => {
+  const { userId } = req.params;
+  const { public_id } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "professional") {
+      const professional = await Professional.findOne({ userId: user._id });
+      if (!professional) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+
+      const images = professional.images;
+
+      // Check if public_id exists in the array
+      const assetExists = images.some((image) => {
+        const parsedImage = JSON.parse(image); // Parse the JSON string
+        return parsedImage.public_id === public_id; // Check if public_id matches
+      });
+
+      if (!assetExists) {
+        return res.status(404).json({ message: "Image with the given public_id not found" });
+      }
+
+      // Filter the array to remove the specified asset
+      const updatedImages = images.filter((image) => {
+        const parsedImage = JSON.parse(image);
+        return parsedImage.public_id !== public_id;
+      });
+
+      professional.images = updatedImages;
+
+      // Save the updated professional data
+      await professional.save();
+
+      return res.status(200).json({
+        message: "Image deleted successfully",
+        updatedImages: professional.images,
+      });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Only professionals can delete images" });
+    }
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
 });
+
+// Delete All an image
+router.delete("/DeleteAllImages/:userId", 
+  //upload.deleteFiles, 
+  uploadToCloudinary.deleteAllImages,  async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role === "professional") {
+      const professional = await Professional.findOne({ userId: user._id });
+      if (!professional) {
+        return res.status(404).json({ message: "Professional not found" });
+      }
+
+
+      professional.images = [];
+
+      // Save the updated professional data
+      await professional.save();
+
+      return res.status(200).json({
+        message: "All Image deleted successfully",
+      });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Only professionals can delete images" });
+    }
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
 module.exports = router;
