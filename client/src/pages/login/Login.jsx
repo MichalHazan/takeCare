@@ -28,7 +28,9 @@ const Login = () => {
         login, // Changed from email to login
         password,
       });
-      
+      console.log("response.data:", response.data);
+      console.log("response.data.token:", response.data.token);
+
       // Store tokens
       localStorage.setItem("accessToken", response.data.token);
 

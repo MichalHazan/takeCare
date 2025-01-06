@@ -1,32 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Typography, Divider, Paper, IconButton, TextField, Button } from "@mui/material";
 import { useLanguage } from "../../context/LanguageContext";
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../../api/axiosConfig";
+import { checkLogin, getLoggedInUser } from "../../utils/authUtils";
 
-const ProfilePage = ({ userDetails }) => {
+const ProfilePage = ({ userId }) => {
     const { language } = useLanguage();
     const { t } = useTranslation();
-
-    // State to handle editable fields
+    const [loginUser, setLoginUser] = useState(false);
+    const [userDetails, setUserDetails] = useState(null);
     const [editableField, setEditableField] = useState(null);
     const [fieldValue, setFieldValue] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Handle save for the edited field
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await axiosInstance.get(`/api/users/user/${userId}`);
+                setUserDetails(response.data);
+            } catch (error) {
+                console.error("Error fetching user details:", error.response?.data || error.message);
+            }
+        };
+
+        const user = getLoggedInUser();
+        if (user?.id) {
+            setLoginUser(userId === user.id);
+        }
+
+        if (userId) fetchUserDetails();
+    }, [userId]);
+
     const handleSave = async () => {
         setLoading(true);
         try {
             const updatedField = { [editableField]: fieldValue };
             const response = await axiosInstance.put(
-                `/api/users/update/${userDetails.user._id}`,
+                `/api/users/update/${userId}`,
                 updatedField
             );
-            console.log("Updated user details:", response.data);
-            userDetails.user[editableField] = fieldValue; // Update the local state to reflect changes
-            userDetails.professionalDetails[editableField] = fieldValue; // Update the local state to reflect changes
-            //alert(t("Changes saved successfully"));
+            setUserDetails((prev) => ({
+                ...prev,
+                user: {
+                    ...prev.user,
+                    [editableField]: fieldValue,
+                },
+                professionalDetails: {
+                    ...prev.professionalDetails,
+                    [editableField]: fieldValue,
+                },
+            }));
         } catch (error) {
             console.error("Error updating user details:", error.response?.data || error.message);
             alert(t("Failed to save changes"));
@@ -34,6 +59,10 @@ const ProfilePage = ({ userDetails }) => {
         setEditableField(null);
         setLoading(false);
     };
+
+    if (!userDetails) {
+        return <Typography>{t("Loading user details...")}</Typography>;
+    }
 
     return (
         <Paper
@@ -43,11 +72,11 @@ const ProfilePage = ({ userDetails }) => {
                 borderRadius: "10px",
                 padding: 2,
                 margin: "10px",
-                backgroundColor: "white",
+                backgroundColor: "#eee",
                 boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
             }}
         >
-            {[   // Editable fields
+            {[
                 {
                     title: t("Full Name"),
                     value: userDetails?.user?.fullname || t("Not provided"),
@@ -100,18 +129,20 @@ const ProfilePage = ({ userDetails }) => {
                         <Typography variant="subtitle2" fontWeight="bold">
                             {item.title}
                         </Typography>
-                        <IconButton
-                            onClick={() => {
-                                setEditableField(item.field);
-                                setFieldValue(item.value);
-                            }}
-                            sx={{
-                                border: editableField === item.field ? "2px solid #1976D2" : "none",
-                                borderRadius: "5px",
-                            }}
-                        >
-                            <BorderColorIcon fontSize="small" sx={{ color: "#AB9798" }} />
-                        </IconButton>
+                        {loginUser && (
+                            <IconButton
+                                onClick={() => {
+                                    setEditableField(item.field);
+                                    setFieldValue(item.value);
+                                }}
+                                sx={{
+                                    border: editableField === item.field ? "2px solid #1976D2" : "none",
+                                    borderRadius: "5px",
+                                }}
+                            >
+                                <BorderColorIcon fontSize="small" sx={{ color: "#AB9798" }} />
+                            </IconButton>
+                        )}
                     </Box>
                     {editableField === item.field ? (
                         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>

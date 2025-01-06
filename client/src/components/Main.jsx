@@ -16,7 +16,7 @@ export default function Main() {
         <Route path="/Home" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route path="/Feed" element={<Feed />}></Route>
+        <Route path="/Feed/:userId" element={<Feed />}></Route>
         <Route path="/admin" element={<AdminPage />}></Route>
         <Route path="/test" element={<MyAcount />}></Route>
         <Route path="/testCities" element={<IsraeliAddressSelector />}></Route>

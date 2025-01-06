@@ -3,10 +3,13 @@ import { Box, Typography, Button } from "@mui/material";
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import axiosInstance from "../../api/axiosConfig";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { checkLogin, getLoggedInUser } from '../../utils/authUtils';
 
 
 
 const ImageGallery = ({initialImages  = [] ,userId}) => {
+    const [loginUser, setLoginUser] = useState(false);
+
     const [images, setImages] = useState(initialImages );
     const [uploadedFiles, setUploadedFiles] = useState([]); // שמירת הקבצים שנבחרו
     const [uploadProgress, setUploadProgress] = useState(0); // למעקב אחרי ההתקדמות
@@ -16,6 +19,13 @@ const ImageGallery = ({initialImages  = [] ,userId}) => {
         console.log("Uploaded files:", files);
         setUploadedFiles(files);
     };
+
+    // Check if the user is logged in
+    useEffect(() => {
+        const user = getLoggedInUser();
+        if (user?.id) {
+        setLoginUser(userId=== user.id);}
+    }, []);
 
     // פונקציה לשליחת הקובץ לשרת
     const handleUploadToServer = async () => {
@@ -116,10 +126,17 @@ const ImageGallery = ({initialImages  = [] ,userId}) => {
     return (
         <Box
             sx={{
+
                 display: "grid", // Use grid layout to display images
                 gridTemplateColumns: "repeat(3, 1fr)", // Three columns
                 gap: 2, // Spacing between grid items
                 padding: 2,
+                backgroundColor: "#eee",
+
+                borderRadius: "10px",
+                margin: "10px",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+
             }}
         >
             {paddedImages.map((image, index) => (
@@ -175,7 +192,7 @@ const ImageGallery = ({initialImages  = [] ,userId}) => {
                     )}
 
                     {/* Button to change the image */}
-                    {image?.public_id && (
+                    {(image?.public_id||image?.asset_id)&&loginUser && (
                         <Button
                             onClick={() => handleImageChange(image.public_id)}
                             sx={{
@@ -202,6 +219,7 @@ const ImageGallery = ({initialImages  = [] ,userId}) => {
 
                 </Box>
             ))}
+            {loginUser&&
             <Button
                 component="label"
                 role={undefined}
@@ -224,6 +242,7 @@ const ImageGallery = ({initialImages  = [] ,userId}) => {
                     hidden
                 />
             </Button>
+            }
         </Box>
     );
 };

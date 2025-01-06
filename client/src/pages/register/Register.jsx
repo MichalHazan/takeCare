@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import axiosInstance from '../../api/axiosConfig';
 import { useLanguage } from '../../context/LanguageContext';

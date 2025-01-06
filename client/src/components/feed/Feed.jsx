@@ -7,44 +7,48 @@ import { checkLogin, getLoggedInUser } from '../../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import axiosInstance from "../../api/axiosConfig";
+import { useParams } from "react-router-dom";
+
+
+
 
 
 export default function Feed() {
+
     const { t } = useTranslation();
-    const [loginUser, setLoginUser] = useState({});
     const [userDetails, setUserDetails] = useState(null);
     const [imagesDetails, setImagesDetails] = useState(null);
+    const [professionalId, setProfessionalId] = useState(null);
+
 
     const navigate = useNavigate();
-
+    const { userId } = useParams();
 
     // Check if the user is logged in
     useEffect(() => {
-        if (!checkLogin()) {
-            navigate('/login');
+        if (!userId) {
+            navigate('/Home');
             return;
         }
-
         const user = getLoggedInUser();
         console.log('user', user);
-        setLoginUser( user);
     }, [navigate]);
 
 
 // Print loginUser after it's updated and fetch user details
     useEffect(() => {
-        console.log('loginUser updated::', loginUser);
 
         const fetchUserDetails = async () => {
             try {
-                if (loginUser && loginUser.id) { // Ensure user ID exists before making the call
-                    console.log("Fetching user details for ID:", loginUser.id);
-                    const response = await axiosInstance.get(`/api/users/user/${loginUser.id}`);
+                if (userId) { // Ensure user ID exists before making the call
+                    const response = await axiosInstance.get(`/api/users/user/${userId}`);
                     console.log('response.data:', response.data);
 
                     // Update state
                     setUserDetails(response.data);
                     setImagesDetails(response.data.professionalDetails?.images || []);
+                    setProfessionalId(response.data.professionalDetails?._id || []);
+
                 } else {
                     console.warn("No loginUser or loginUser.id available.");
                 }
@@ -54,11 +58,11 @@ export default function Feed() {
         };
 
         fetchUserDetails();
-    }, [loginUser]); // Trigger when loginUser changes
+    }, [userId]); // Trigger when loginUser changes
 
 // Log changes to userDetails
     useEffect(() => {
-        console.log("Updated userDetails:", userDetails);
+        console.log("Updated userDetailsFeed:", userDetails);
     }, [userDetails]);
 
 // Log changes to imagesDetails
@@ -79,10 +83,10 @@ export default function Feed() {
         >
             <Grid container spacing={2}>
                 <Grid item xs={3}>
-                    <ProfilePage userDetails={userDetails} />
+                    <ProfilePage userId={userId} />
                 </Grid>
                 <Grid item xs={3}>
-                    <Recommendations />
+                    <Recommendations professionalId={professionalId} />
                 </Grid>
                 <Grid
                     item
@@ -98,7 +102,7 @@ export default function Feed() {
                     }}
                 >
                     {imagesDetails ? (
-                        <ImageLayout initialImages ={imagesDetails} userId={loginUser.id}/>
+                        <ImageLayout initialImages ={imagesDetails} userId={userId}/>
                     ) : (
                         <div>
                             Loading images...
