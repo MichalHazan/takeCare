@@ -26,8 +26,9 @@ export default function Feed() {
 
     // Check if the user is logged in
     useEffect(() => {
+        console.log('userIduserId',userId)
         if (!userId) {
-            navigate('/Home');
+            navigate('/');
             return;
         }
         const user = getLoggedInUser();

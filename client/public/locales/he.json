@@ -50,7 +50,14 @@
   "City Name": "עיר",
   "Street Name": "רחוב",
   "Professional Experience": "ניסיון מקצועי",
-  "Description": "תאור"
+  "Description": "תאור",
+  "patient_recommendations": "המלצות מטופלים",
+  "add_review": "הוסף המלצה",
+  "write_recommendation": "כתוב את ההמלצה שלך כאן...",
+  "submit": "שלח",
+  "fill_rating_and_comment": "אנא מלא גם דירוג וגם תגובה.",
+  "error_fetching_details": "שגיאה בשליפת פרטי המשתמש:",
+  "error_adding_review": "שגיאה בהוספת ההמלצה:"
 
 
 }
