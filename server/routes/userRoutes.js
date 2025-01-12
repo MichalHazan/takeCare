@@ -131,7 +131,6 @@ router.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email/username or password" });
     }
-
     // Create a JWT token with the user's id and role
     const token = jwt.sign(
       { id: user._id, role: user.role },
@@ -140,10 +139,14 @@ router.post("/login", async (req, res) => {
 
     // Store user data in session
     req.session.user = {
-      id: user._id,
+      id: user._id.toString(), 
       username: user.username,
       role: user.role,
     };
+
+    console.log('req.session:',req.session)
+    // console.log('req.session.user:',req.session.user)
+    // console.log('token:',token)
 
     res.status(200).json({
       message: "Logged in successfully",
@@ -157,7 +160,9 @@ router.post("/login", async (req, res) => {
 });
 
 // Get user details
-router.get("/user/:userId", async (req, res) => {
+router.get("/user/:userId",
+  //onlyUsers, 
+  async (req, res) => {
   const { userId } = req.params;
   console.log(userId);
 
@@ -203,7 +208,9 @@ router.get("/allprofessional", getProfessionals);
 router.get("/professional/:professionalId", getProfessionalById);
 
 // Update user details
-router.put("/update/:userId", async (req, res) => {
+router.put("/update/:userId", 
+  //onlyUsers, 
+  async (req, res) => {
   const { userId } = req.params;
 
   const {
@@ -312,7 +319,8 @@ router.put(
 // Delete an image
 router.put("/DeleteImages/:userId", 
   //upload.deleteFiles, 
-  uploadToCloudinary.deleteFiles,  async (req, res) => {
+  uploadToCloudinary.deleteFiles,
+  async (req, res) => {
   const { userId } = req.params;
   const { public_id } = req.body;
 
@@ -369,7 +377,8 @@ router.put("/DeleteImages/:userId",
 // Delete All an image
 router.delete("/DeleteAllImages/:userId", 
   //upload.deleteFiles, 
-  uploadToCloudinary.deleteAllImages,  async (req, res) => {
+  uploadToCloudinary.deleteAllImages,
+  async (req, res) => {
   const { userId } = req.params;
 
   try {

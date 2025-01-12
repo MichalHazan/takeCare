@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="249ea785-60ec-4782-acb9-42dfdac681ab" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/server/nominatim.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/feed/Feed.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/feed/Feed.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/feed/ImageLayout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/feed/ImageLayout.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/profile/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/ProfilePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/profile/Recommendations.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/profile/Recommendations.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/login/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/login/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/pages/register/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/register/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middleware/onlyUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middleware/onlyUsers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userRoutes.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,21 +23,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "yosie111"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;yosie111&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
-    "url": "git@github.com:MichalHazan/takeCare.git",
+    "url": "https://github.com/MichalHazan/takeCare.git",
     "accountId": "09922383-e8dc-4112-9fc2-9976df2b4dbf"
   }
 }]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2qNmas3uER5DrUmSb8qPPOPsAnK" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -38,13 +46,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/MichalHazan2/18122024/takeCare",
+    "git-widget-placeholder": "yossi",
+    "last_opened_file_path": "D:/MichalHazan2/1812(2)",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.1.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -64,6 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1734511473497</updated>
       <workItem from="1734511474604" duration="2396000" />
+      <workItem from="1736094582064" duration="804000" />
     </task>
     <servers />
   </component>

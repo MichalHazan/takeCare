@@ -16,16 +16,6 @@ cloudinary.config({
   api_key: CLOUDINARY_API_KEY,
   api_secret: CLOUDINARY_API_SECRET,
 });
-// // Generate a random string for unique naming purposes
-// const generateRandomString = () => {
-//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   let result = '';
-//   for (let i = 0; i < characters.length; i++) {
-//     result += characters.charAt(Math.floor(Math.random() * characters.length));
-//   }
-//   return result;
-// };
-
 // Create a Cloudinary URL
 const createCloudinaryURL = (userId, fileName) => {
   fileName = fileName.replace(/\.[^/.]+$/, ''); // Remove file extension

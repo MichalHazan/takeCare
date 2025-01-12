@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 2000;
 const fs = require("fs");
 const path = require("path");
+const meeting = require("./routes/meetingRoutes")
 //const uploads = require('./uploads')
 
 // Load environment variables
@@ -65,8 +66,11 @@ const reviewRoutes = require('./routes/reviewRoutes');
 
 app.use('/api/reviews', reviewRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/meeting", meeting);
+
 // הגדרת תיקיית uploads כסטטית
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Start the server
 app.listen(PORT, () =>

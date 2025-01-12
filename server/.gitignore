@@ -26,3 +26,7 @@ yarn-error.log*
 .env.local
 .env.production
 clientid.json
+/uploads/
+client_secret_1_904178586203-b6to6dcue8l08qdbd21l23vp73inb9vt.apps.googleusercontent.com.json
+credentials.json
+token.json
