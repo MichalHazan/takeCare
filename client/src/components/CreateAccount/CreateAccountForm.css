@@ -1,0 +1,105 @@
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 24px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    direction: rtl;
+  }
+  
+  .form-content {
+    margin-top: 16px;
+  }
+  
+  .form-input {
+    margin-bottom: 16px !important;    
+  }
+  
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  
+  .form-small-input {
+    width: 30%;
+  }
+  
+  .form-checkbox {
+    margin-bottom: 16px;    
+  }
+
+  .space{
+    width: 2dvw;
+  }
+
+  .createTheAccount {
+    background: linear-gradient(90deg, #f8c6c4, #fab28d) !important; /* Your desired color for enabled state */
+    color: black !important; /* Your desired text color */
+    border-radius: 10px !important;
+    height: 8vh;
+    font-size: larger !important;
+}
+
+
+
+.mySnackbar {
+  background: linear-gradient(90deg, #f8c6c4, #fab28d) !important; /* Use background instead of background-color */
+  color: black !important; /* Your desired text color */
+  border-radius: 10px !important;
+  height: 10vh;
+  font-size: larger !important;
+  border:solid 1px rgb(56, 50, 50);
+}
+
+
+
+.mySnackbarButton{
+  background-color:   #f8c6c4 !important ;
+  color: rgb(46, 42, 42) !important;
+  margin-right: 8% !important;
+}
+
+.dateError{
+  color: black;
+}
+
+  .css-1rju2q6-MuiButtonBase-root-MuiMergbnuItem-root.Mui-selected {
+    background: linear-gradient(90deg, #f8c6c4, #fab28d) !important;
+}
+.pink-border{
+    border:  solid  #fab28d !important;    
+}
+
+.street{
+    width: 10vw;
+}
+
+.fullName{
+  display: flex;
+  flex-direction: row ;
+}
+
+/* Custom CSS to modify the cloudinary-button */
+.cloudinary-button {
+  background:  linear-gradient(90deg, #f8c6c4, #fab28d) !important; /* Custom background */
+  color: white !important; /* Custom text color */
+  border-radius: 10px; /* Round the corners */
+  padding: 10px 20px; /* Add some padding */
+  border: none; /* Remove the default border */
+  font-size: 16px !important; /* Set font size */
+  cursor: pointer; /* Change cursor on hover */
+  width: 15vw;
+
+}
+
+.cloudinary-button:hover {
+  background-color:  #fab28d !important; /* Darker shade on hover */
+}
+.uploadImage{
+  text-align: center; 
+  margin-bottom: 16px; 
+}
+
+

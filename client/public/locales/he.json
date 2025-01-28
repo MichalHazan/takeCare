@@ -57,7 +57,28 @@
   "submit": "שלח",
   "fill_rating_and_comment": "אנא מלא גם דירוג וגם תגובה.",
   "error_fetching_details": "שגיאה בשליפת פרטי המשתמש:",
-  "error_adding_review": "שגיאה בהוספת ההמלצה:"
-
-
+  "error_adding_review": "שגיאה בהוספת ההמלצה:",
+  "enLocale": "heLocale",
+  "Street": "רחוב",
+  "City":"עיר",
+  "pilates": "פילאטיס",
+  "nlp": "NLP",
+  "psychology": "פסיכולוגיה",
+  "sociology": "סוציולוגיה",
+  "Services Offered": "סוגי שירותים",
+  "In-Person Services": "שירותים פרונטליים",
+  "Online Services": "שירותים בזום",
+  "January": "ינואר",
+  "February": "פברואר",
+  "March": "מרץ",
+  "April": "אפריל",
+  "May": "מאי",
+  "June": "יוני",
+  "July": "יולי",
+  "August": "אוגוסט",
+  "September": "ספטמבר",
+  "October": "אוקטובר",
+  "November": "נובמבר",
+  "December": "דצמבר"
 }
+

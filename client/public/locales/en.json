@@ -47,6 +47,21 @@
   "submit": "Submit",
   "fill_rating_and_comment": "Please fill in both rating and comment.",
   "error_fetching_details": "Error fetching user details:",
-  "error_adding_review": "Error adding review:"
+  "error_adding_review": "Error adding review:",
+  "enLocale": "enLocale",
+  "Street": "Street",
+  "City":"City",
+  "fitness trainer": "Fitness Trainer",
+  "yoga": "Yoga",
+  "pilates": "Pilates",
+  "nlp": "NLP",
+  "psychology": "Psychology",
+  "sociology": "Sociology",
+  "Professions": "Professions",
+  "Services Offered": "Services Offered",
+  "In-Person Services": "In-Person Services",
+  "Online Services": "Online Services",
+  "Hourly Rate": "Hourly Rate",
+  "I would also like to join as a therapist":"I would also like to join as a therapist"
 }
 

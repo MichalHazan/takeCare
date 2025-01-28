@@ -5,6 +5,7 @@ import i18n from "../i18n";
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
+
   const [language, setLanguage] = useState(i18n.language || "he");
 
   const toggleLanguage = () => {

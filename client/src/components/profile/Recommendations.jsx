@@ -4,60 +4,99 @@ import { Avatar, Card, CardContent, Rating, Stack } from "@mui/material";
 import { checkLogin, getLoggedInUser } from "../../utils/authUtils";
 import axiosInstance from "../../api/axiosConfig";
 import { useTranslation } from "react-i18next";
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 
 
 const Recommendations = ({ professionalId }) => {
     const { t } = useTranslation();
 
-    const [loginUser, setLoginUser] = useState({});
+    const [loginIdUser, setLoginIdUser] = useState({});
     const [login, setLogin] = useState(false);
+    const [loginUser, setLoginUser] = useState(false);
 
     const [ReviewDetails, setReviewDetails] = useState([]);
     const [newComment, setNewComment] = useState(""); // New comment field
     const [newRating, setNewRating] = useState(0); // New rating field
 
+    const fetchUserDetails = async () => {
+        try {
+            const response = await axiosInstance.get(`/api/reviews/${professionalId}`);
+            setReviewDetails(response.data);
+        } catch (error) {
+            console.error("Error fetching user details:", error.response?.data || error.message);
+        }
+    };
+
     useEffect(() => {
-        const fetchUserDetails = async () => {
-            try {
-                const response = await axiosInstance.get(`/api/reviews/${professionalId}`);
-                setReviewDetails(response.data);
-            } catch (error) {
-                console.error("Error fetching user details:", error.response?.data || error.message);
-            }
-        };
 
         const userLogin=checkLogin(professionalId);
         setLogin(userLogin)
 
-        // const user = checkLogin(professionalId);
-        // setLogin(user)
-        // if (user?.id) {
-        //     setLoginUser(professionalId === user.id);
-        // }
+        const user = getLoggedInUser();
+        //console.log('getLoggedInUser',user)
+        if (user?.id) {
+            setLoginIdUser(user.id)
+        }
 
         if (professionalId) fetchUserDetails();
     }, [professionalId,login]);
+
+    const customerMyReview = (r) => {
+        return r && r.customerId && r.customerId._id === loginIdUser;
+    }
+
+
+    // const customerMyReview=(r)=>{
+    //     console.log('loginIdUser',loginIdUser)
+    //
+    //     console.log('r',r,'===',loginIdUser)
+    //     return(r.customerId._id===loginIdUser)
+    // }
 
     const handleAddReview = async () => {
         if (!newComment || newRating === 0) {
             alert(t("fill_rating_and_comment"));
             return;
         }
-
         try {
+            if (!loginIdUser) {
+                throw new Error("You need to log in.");
+            }
             const newReview = {
                 comment: newComment,
                 rating: newRating,
                 professionalId: professionalId,
+                customerId:loginIdUser
             };
+
             const response = await axiosInstance.post(`/api/reviews`, newReview);
-            setReviewDetails((prev) => [...prev, response.data]); // Add the review to the list
+            console.log(response.status)
+            if(response.status===201){
+                await fetchUserDetails(); // קריאה ל-fetchUserDetails
+            }
+            //setReviewDetails((prev) => [...prev, response.data]); // Add the review to the list
             setNewComment(""); // Reset the fields
             setNewRating(0);
         } catch (error) {
             console.error(t("error_adding_review"), error.response?.data || error.message);
         }
     };
+
+    const handleDeleteReview = async (review) => {
+        try {
+            console.log(review)
+            const response= await axiosInstance.patch(`/api/reviews/${review._id}`, {
+                customerId: review.customerId,
+            });
+            console.log(response)
+            // עדכון ה-state לאחר המחיקה
+            setReviewDetails((prev) => prev.filter((item) => item._id !== review._id));
+            console.log("Review deleted successfully");
+        } catch (error) {
+            console.error("Error deleting review:", error.response?.data || error.message);
+        }
+    };
+
 
     return (
         <Box
@@ -118,7 +157,14 @@ const Recommendations = ({ professionalId }) => {
 
             <Stack spacing={2} sx={{ width: "90%" }}>
                 {ReviewDetails.map((review, index) => (
-                    <Card key={index} sx={{ boxShadow: "none", borderRadius: "8px" }}>
+                    <Card
+                        key={index}
+                        sx={{
+                            boxShadow: "none",
+                            borderRadius: "8px",
+                            position: "relative", // מוסיף יחסי כבסיס לכפתור המחיקה
+                        }}
+                    >
                         <CardContent sx={{ display: "flex", alignItems: "flex-start" }}>
                             <Avatar
                                 sx={{
@@ -146,6 +192,30 @@ const Recommendations = ({ professionalId }) => {
                                 </Typography>
                             </Box>
                         </CardContent>
+                        {customerMyReview(review) && (
+                            <Button
+                                onClick={() => handleDeleteReview(review)} // קריאה לפונקציה למחיקה
+                                sx={{
+                                    position: "absolute",
+                                    top: "8px",
+                                    right: "8px",
+                                    backgroundColor: "rgba(255, 255, 255, 0.8)",
+                                    borderRadius: "50%",
+                                    padding: "4px",
+                                    minWidth: "auto",
+                                    height: "32px",
+                                    width: "32px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    '&:hover': {
+                                        backgroundColor: "rgba(255, 255, 255, 1)",
+                                    },
+                                }}
+                            >
+                                <DeleteForeverOutlinedIcon sx={{ fontSize: "20px", color: "#333" }} />
+                            </Button>
+                        )}
                     </Card>
                 ))}
             </Stack>
