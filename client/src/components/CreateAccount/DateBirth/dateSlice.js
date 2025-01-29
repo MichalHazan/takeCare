@@ -18,7 +18,6 @@ export const validateDate = (day, month, year) => {
         year <= new Date().getFullYear()
     );
 };
-
 // Redux Slice
 const dateSlice = createSlice({
     name: "date",
@@ -39,6 +38,7 @@ const dateSlice = createSlice({
         setDateError: (state, action) => {
             state.dateError = action.payload.dateError;
             state.formattedDate = action.payload.formattedDate;
+            state.DateErrorMessage = action.payload.DateErrorMessage; // הוספת שדה הודעה
         },
     },
 });

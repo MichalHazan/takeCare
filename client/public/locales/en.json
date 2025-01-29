@@ -1,4 +1,5 @@
 {
+  "Direction": "ltr",
   "welcome": "Welcome to our website!",
   "description": "This is an internationalized app.",
   "Login": "Login",
@@ -62,6 +63,10 @@
   "In-Person Services": "In-Person Services",
   "Online Services": "Online Services",
   "Hourly Rate": "Hourly Rate",
-  "I would also like to join as a therapist":"I would also like to join as a therapist"
+  "I would also like to join as a therapist":"I would also like to join as a therapist",
+  "Please fill out your birth date": "Please fill out your birth date",
+  "Year": "Year",
+  "Month": "Month",
+  "Day": "Day"
 }
 

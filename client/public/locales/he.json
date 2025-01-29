@@ -1,4 +1,5 @@
 {
+  "Direction": "rtl",
   "welcome": "ברוכים הבאים לאתר שלנו!",
   "description": "זו אפליקציה עם תמיכה בשפות שונות.",
   "Login": "התחברות",
@@ -79,6 +80,11 @@
   "September": "ספטמבר",
   "October": "אוקטובר",
   "November": "נובמבר",
-  "December": "דצמבר"
+  "December": "דצמבר",
+  "Please fill out your birth date": "הכנס תאריך לידה",
+  "Year": "שנה",
+  "Please enter a valid Data": "הכנס תאריך תקין",
+  "Month": "חודש",
+  "Day": "יום"
 }
 

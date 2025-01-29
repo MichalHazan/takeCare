@@ -4,7 +4,7 @@ import dateReducer from "./CreateAccount/DateBirth/dateSlice";
 import personalDetailsReducer from './CreateAccount/PersonalDetails/personalDetailsSlice';
 import locationReducer from "./CreateAccount/LocationFields/locationSlice";
 // import professionalDetailsReducer from "./CreateAccount/ProfessionalDetails/professionalDetailsSlice";
-import professionalDetailsReducer from "./CreateAccount/ProfessionalDetails/ProfessionalFields";
+import professionalDetailsReducer from "./CreateAccount/ProfessionalDetails/professionalDetailsSlice";
 
 
 const store = configureStore({

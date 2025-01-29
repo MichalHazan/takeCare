@@ -20,11 +20,10 @@ const CreateAccountForm = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [snackbarMessage, setSnackbarMessage] = useState([]);
     const { t } = useTranslation();
     const dispatch = useDispatch();
     let hasError = false;
-    const { day, month, year,formattedDate } = useSelector((state) => state.date);
+    const { day, month, year,formattedDate,dateError,DateErrorMessage } = useSelector((state) => state.date);
     const {
         firstName,
         lastName,
@@ -61,7 +60,6 @@ const CreateAccountForm = () => {
 
     const handleSubmit1 = () => {
          hasError = false;
-        // Validate email
         if (!validateEmail(email)) {
             let message = "";
             if (email === "") {
@@ -69,8 +67,7 @@ const CreateAccountForm = () => {
             } else {
                 message = t("Please enter a valid email address");
             }
-            setSnackbarMessage(message);
-            setOpenSnackbar(true);
+
             dispatch(updateField({ field: "emailError", value: true }));
             dispatch(updateField({ field: "emailErrorMessage", value: message })); // שמירת ההודעה ב-Redux
             hasError = true;
@@ -84,8 +81,7 @@ const CreateAccountForm = () => {
             } else {
                 messagePhone = t("Please enter a valid phone number");
             }
-            setSnackbarMessage(messagePhone);
-            setOpenSnackbar(true);
+
             dispatch(updateField({ field: "phoneError", value: true }));
             dispatch(updateField({ field: "phoneErrorMessage", value: messagePhone })); // שמירת ההודעה ב-Redux
             hasError = true;
@@ -94,19 +90,19 @@ const CreateAccountForm = () => {
         if (!validateDateBirth(day, month, year)) {
             let messageDate=""
             if (!day || !month || !year) {
-                messageDate = t("Please fill out your birth date");
+                messageDate = `${t("Please fill out your birth date")}`;
             } else {
-                messageDate = t("Please enter a valid Data");
+                messageDate = `${t("Please enter a valid Data")}`;
             }
-            setSnackbarMessage(messageDate);
-            setOpenSnackbar(true);
+            dispatch(setDateError({ dateError: true, formattedDate: null, DateErrorMessage: messageDate }));
+
             dispatch(updateField({ field: "dateError", value: true })); // עדכון Redux אם צריך
             dispatch(updateField({ field: "DateErrorMessage", value: messageDate })); // שמירת ההודעה ב-Redux
             hasError = true;
         }
 
         if (hasError) {
-            return;
+            //return;
         }
 
         console.log("Submitted Data:");
@@ -125,6 +121,7 @@ const CreateAccountForm = () => {
         console.log(`House Number: ${houseNumber}`);
         console.log(`Coordinates: ${JSON.stringify(coordinates)}`);
         console.log(`Professions: ${professions?.join(", ") || "None"}`);
+        console.log(`DateErrorMessage: ${DateErrorMessage}`);
         console.log(`Services: ${JSON.stringify(services)}`);
         console.log(`Description: ${description || "No description"}`);
         console.log(`Images: ${images?.length ? images.join(", ") : "No images"}`);

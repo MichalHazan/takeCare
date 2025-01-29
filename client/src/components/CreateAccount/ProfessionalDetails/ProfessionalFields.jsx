@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { createSlice } from "@reduxjs/toolkit";
 import {
     Checkbox,
     FormControl,
@@ -12,60 +11,19 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import { setProfessions, setService, setDescription, setHourlyRate } from "./professionalDetailsSlice";
 
-/** ======================= Redux Slice ======================= **/
-const initialState = {
-    professions: [],
-    images:[],//הוספתי, הוסף את הפונקציות הדרושות
-    services: {
-        inPerson: true,
-        viaZoom: false,
-    },
-    description: "",
-    hourlyRate: "",
-};
-
-const professionalDetailsSlice = createSlice({
-    name: "professionalDetails",
-    initialState,
-    reducers: {
-        setProfessions(state, action) {
-            state.professions = action.payload;
-        },
-        setService(state, action) {
-            const { serviceType, isChecked } = action.payload;
-            state.services[serviceType] = isChecked;
-        },
-        setDescription(state, action) {
-            state.description = action.payload;
-        },
-        setHourlyRate(state, action) {
-            state.hourlyRate = action.payload;
-        },
-    },
-});
-
-export const {
-    setProfessions,
-    setService,
-    setDescription,
-    setHourlyRate,
-} = professionalDetailsSlice.actions;
-
-export default professionalDetailsSlice.reducer;
-
-/** ======================= Component ======================= **/
 const ProfessionalFields = () => {
-    const { t } = useTranslation(); // Hook for translations
+    const { t } = useTranslation(); // Hook לתרגומים
     const dispatch = useDispatch();
 
-    // Retrieve state values from Redux store
+    // שליפת נתונים מה-Redux
     const professions = useSelector((state) => state.professionalDetails.professions);
     const services = useSelector((state) => state.professionalDetails.services);
     const description = useSelector((state) => state.professionalDetails.description);
     const hourlyRate = useSelector((state) => state.professionalDetails.hourlyRate);
 
-    // Profession options with translations
+    // אפשרויות המקצועות עם תרגומים
     const professionOptions = [
         { label: t("Fitness Trainer"), value: "fitness trainer" },
         { label: t("Yoga"), value: "yoga" },
@@ -75,9 +33,9 @@ const ProfessionalFields = () => {
         { label: t("Sociology"), value: "sociology" },
     ];
 
-
     return (
         <>
+            {/* בחירת מקצוע */}
             <FormControl fullWidth margin="normal" required>
                 <InputLabel>{t("Professions")}</InputLabel>
                 <Select
@@ -103,9 +61,9 @@ const ProfessionalFields = () => {
                         </MenuItem>
                     ))}
                 </Select>
-
             </FormControl>
 
+            {/* בחירת סוגי שירותים */}
             <FormControl fullWidth margin="normal">
                 <Typography>{t("Services Offered")}</Typography>
                 <FormControlLabel
@@ -134,6 +92,7 @@ const ProfessionalFields = () => {
                 />
             </FormControl>
 
+            {/* תיאור מקצועי */}
             <TextField
                 label={t("Description")}
                 variant="outlined"
@@ -145,6 +104,7 @@ const ProfessionalFields = () => {
                 onChange={(e) => dispatch(setDescription(e.target.value))}
             />
 
+            {/* מחיר לשעה */}
             <TextField
                 label={t("Hourly Rate")}
                 type="number"
